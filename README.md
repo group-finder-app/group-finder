@@ -1,2 +1,67 @@
-# group-finder
-Group matching application for students
+# Grouper 🤝 
+**The Centralized Group Formation Marketplace**
+
+## 📝 Project Overview
+**Grouper** is a web-based team-building platform designed to solve the decentralized and inefficient process of university group formation. Instead of relying on awkward in-person requests or random instructor assignments, students can use Grouper to find compatible teammates based on shared goals, technical skills, and schedules.
+
+## ⚖️ Problem Statement
+In university courses with mandatory projects, students without existing social networks are often at a disadvantage. Current methods—like shouting in lectures or manual instructor intervention—lead to mismatched schedules, incompatible skill sets, and poor project outcomes. Grouper provides a centralized digital platform to ensure every student has equal agency in building their team.
+
+## 🎯 Target Users
+* **Primary Users (Students):** Students seeking partners or looking to fill vacancies in their existing teams.
+* **Secondary Users (Instructors):** Benefit from reduced administrative burden and fewer "orphaned" students at project deadlines.
+
+---
+
+## 🚀 Milestone 01: Planning & Design
+This repository contains the foundational design and architectural planning for the Grouper application.
+
+### Quick Links
+* **Project Board (Kanban):** https://github.com/orgs/group-finder-app/projects/1
+* **Documentation/Wiki:** [Link to your GitHub Wiki]
+* **Wireframes/Design:** [Link to Wireframe PDF or Folder]
+
+---
+
+## ✨ Features (Scope)
+
+### 🔴 Must Have (Essential for Viability)
+* **User Authentication:** Secure login/signup (Exploring SSO/Microsoft API for Laurier accounts).
+* **Group Management (CRUD):** Create, edit, and delete group "Help Wanted" listings.
+* **Course-Based Browsing:** Filterable main feed strictly by Course Code (e.g., CP476).
+* **Join Request Workflow:** State-management for "Request to Join" -> "Leader Approval/Decline."
+* **Roster Management:** A dashboard for group leaders to manage applicants and team capacity.
+* **Basic User Profiles:** Read-only profiles showing Name, Program, and Year Level.
+
+### 🟡 Should Have (Significant Value)
+* **Skill Tagging System:** Searchable tags (e.g., "JavaScript," "SQL") for both users and group requirements.
+* **Availability Indicators:** General schedule preferences to ensure time-compatibility.
+* **Advanced Filtering:** Search by specific criteria (e.g., "Groups looking for Frontend").
+* **In-App Notifications:** Visual alerts for request updates or new applicants.
+
+### 🟢 Could Have (Future Enhancements)
+* **Instructor Dashboard:** Specialized view for professors to see "Orphaned" students.
+* **Endorsement System:** Peer-review "badges" for skills like "Good Communicator."
+* **Contact Export:** Downloadable text file with team email/Discord IDs.
+
+---
+
+## 🚫 Out of Scope
+* **Real-time Chat:** Users will exchange contact info (Discord/Email) once a group is formed.
+* **Project Management:** No task boards or file sharing.
+* **LMS Integration:** We will use mock data rather than direct MyLS/Brightspace API integration.
+
+---
+
+## 👥 Team Plan & Organization
+
+| Role | Responsibility | Member |
+| :--- | :--- | :--- |
+| **Project Lead** | Timeline, submission coordination, and GitHub management. | [Name] |
+| **Frontend Lead** | UI/UX Design and React/HTML implementation. | [Name] |
+| **Backend Lead** | Database management, API design (SSO), and logic. | [Name] |
+| **QA / Docs** | Testing, Acceptance Criteria, and Wiki maintenance. | [Name] |
+
+**Communication:** Discord | **Meeting Cadence:** 
+
+**Definition of Done:** Code is pushed, meets all User Story Acceptance Criteria, and is peer-reviewed.
