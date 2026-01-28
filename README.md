@@ -1,11 +1,11 @@
 # Grouper 🤝 
-**The Centralized Group Formation Marketplace**
+**The Centralized Group Formation Application**
 
 ## 📝 Project Overview
 **Grouper** is a web-based team-building platform designed to solve the decentralized and inefficient process of university group formation. Instead of relying on awkward in-person requests or random instructor assignments, students can use Grouper to find compatible teammates based on shared goals, technical skills, and schedules.
 
 ## ⚖️ Problem Statement
-In university courses with mandatory projects, students without existing social networks are often at a disadvantage. Current methods—like shouting in lectures or manual instructor intervention—lead to mismatched schedules, incompatible skill sets, and poor project outcomes. Grouper provides a centralized digital platform to ensure every student has equal agency in building their team.
+In university courses with mandatory projects, students without existing social networks are often at a disadvantage. Current methods (like shouting in lectures or manual instructor intervention) lead to mismatched schedules, incompatible skill sets, and poor project outcomes. Grouper provides a centralized digital platform to ensure every student has equal agency in building their team.
 
 ## 🎯 Target Users
 * **Primary Users (Students):** Students seeking partners or looking to fill vacancies in their existing teams.
@@ -18,7 +18,7 @@ This repository contains the foundational design and architectural planning for 
 
 ### Quick Links
 * **Project Board (Kanban):** https://github.com/orgs/group-finder-app/projects/1
-* **Documentation/Wiki:** [Link to your GitHub Wiki]
+* **Documentation/Wiki:** https://github.com/group-finder-app/group-finder/wiki
 * **Wireframes/Design:** [Link to Wireframe PDF or Folder]
 
 ---
@@ -62,6 +62,6 @@ This repository contains the foundational design and architectural planning for 
 | **Backend Lead** | Database management, API design (SSO), and logic. | [Name] |
 | **QA / Docs** | Testing, Acceptance Criteria, and Wiki maintenance. | [Name] |
 
-**Communication:** Discord | **Meeting Cadence:** 
+**Communication:** Discord | **Meeting Cadence:** Bi-weekly~
 
 **Definition of Done:** Code is pushed, meets all User Story Acceptance Criteria, and is peer-reviewed.
