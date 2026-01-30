@@ -19,7 +19,6 @@ This repository contains the foundational design and architectural planning for 
 ### Quick Links
 * **Project Board (Kanban):** https://github.com/orgs/group-finder-app/projects/1
 * **Documentation/Wiki:** https://github.com/group-finder-app/group-finder/wiki
-* **Wireframes/Design:** [Link to Wireframe PDF or Folder]
 
 ---
 
@@ -52,16 +51,3 @@ This repository contains the foundational design and architectural planning for 
 * **LMS Integration:** We will use mock data rather than direct MyLS/Brightspace API integration.
 
 ---
-
-## 👥 Team Plan & Organization
-
-| Role | Responsibility | Member |
-| :--- | :--- | :--- |
-| **Project Lead** | Timeline, submission coordination, and GitHub management. | [Name] |
-| **Frontend Lead** | UI/UX Design and React/HTML implementation. | [Name] |
-| **Backend Lead** | Database management, API design (SSO), and logic. | [Name] |
-| **QA / Docs** | Testing, Acceptance Criteria, and Wiki maintenance. | [Name] |
-
-**Communication:** Discord | **Meeting Cadence:** Bi-weekly~
-
-**Definition of Done:** Code is pushed, meets all User Story Acceptance Criteria, and is peer-reviewed.
