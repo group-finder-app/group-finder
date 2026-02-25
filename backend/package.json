@@ -4,7 +4,8 @@
   "description": "**The Centralized Group Formation Application**",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
@@ -18,4 +19,8 @@
     "url": "https://github.com/group-finder-app/group-finder/issues"
   },
   "homepage": "https://github.com/group-finder-app/group-finder#readme"
+
+
+
 }
+
