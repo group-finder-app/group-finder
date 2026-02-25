@@ -1,3 +1,4 @@
+(Bottom of the README contains simple instructions to locally run frontend / backend) 
 # Grouper 🤝 
 **The Centralized Group Formation Application**
 
@@ -51,3 +52,30 @@ This repository contains the foundational design and architectural planning for 
 * **LMS Integration:** We will use mock data rather than direct MyLS/Brightspace API integration.
 
 ---
+
+## Backend Setup
+
+### Prerequisites
+- Node.js (v14 or higher)
+- npm
+- MySQL (optional for now - stub endpoints work without DB)
+
+### Installation & Running
+1. Navigate to backend folder:
+   ```bash
+  cd backend
+  npm install
+
+2. Create a .env file in the backend/ root directory and add the following configuration (placeholder until connection to db):
+  PORT=5000
+  DB_HOST=localhost
+  DB_USER=your_mysql_user
+  DB_PASS=your_mysql_password
+  DB_NAME=grouper
+  JWT_SECRET=your_secret_key
+
+3. To start the server in development mode:
+   npm run dev
+
+   The server will start at http://localhost:5000
+
