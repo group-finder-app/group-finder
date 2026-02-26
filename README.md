@@ -80,10 +80,30 @@ JWT_SECRET=your_secret_key
 
 The server will start at http://localhost:5000
 
+---
+
 ## Frontend Setup
 
+### Prerequisites
+* A modern web browser (Chrome, Firefox, Edge, etc.)
+* [Optional] [VS Code](https://code.visualstudio.com/) with the **Live Server** extension for real-time updates.
 
-Placeholder 
+### Installation & Local Setup
+
+1. **Clone the repository:**
+   Clone the repository using this command inside the folder's terminal.
+   ```bash
+   git clone https://github.com/group-finder-app/group-finder.git
+   cd group-finder
+
+2. **Switch to the Correct Branch**
+   ```bash
+     git checkout frontend-setup
+
+3. Run the Front-End
+     Locate index.html in your file explorer and double-click it to open it directly in your browser.
+
+---
 
 ## Team Members & Contributions
 
@@ -92,7 +112,7 @@ Placeholder
 | Drake Martin | 150473490 | mart3490@mylaurier.ca | Backend Setup/README/Kanban/Wiki edits |
 | Josh Gelbaum | 169039064 | gelb9064@mylaurier.ca | Frontend Co-Developer, HTML Structure/Semantics, CSS |
 | Kyler Smart | 169040921 | smar0921@mylaurier.ca | placeholder |
-| Paul Matsialko | 169028235 | mats8235@mylaurier.ca | placeholder |
+| Paul Matsialko | 169028235 | mats8235@mylaurier.ca | Frontend Co-Developer, README|
 
 
 
