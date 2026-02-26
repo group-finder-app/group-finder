@@ -63,19 +63,37 @@ This repository contains the foundational design and architectural planning for 
 ### Installation & Running
 1. Navigate to backend folder:
    ```bash
-  cd backend
-  npm install
+   cd backend
+   npm install
 
 2. Create a .env file in the backend/ root directory and add the following configuration (placeholder until connection to db):
-  PORT=5000
-  DB_HOST=localhost
-  DB_USER=your_mysql_user
-  DB_PASS=your_mysql_password
-  DB_NAME=grouper
-  JWT_SECRET=your_secret_key
+PORT=5000
+DB_HOST=localhost
+DB_USER=your_mysql_user
+DB_PASS=your_mysql_password
+DB_NAME=grouper
+JWT_SECRET=your_secret_key
 
 3. To start the server in development mode:
+   ```bash
    npm run dev
 
-   The server will start at http://localhost:5000
+The server will start at http://localhost:5000
+
+## Frontend Setup
+
+
+Placeholder 
+
+## Team Members & Contributions
+
+| Student Name | Student Number | Email | Contributions |
+|-------------|----------------|-----------------------|---------------|
+| Drake Martin | 150473490 | mart3490@mylaurier.ca | Backend Setup/README/Kanban/Wiki edits |
+| Josh Gelbaum | 169039064 | gelb9064@mylaurier.ca | placeholder |
+| Kyler Smart | 169040921 | smar0921@mylaurier.ca | placeholder |
+| Paul Matsialko | 169028235 | mats8235@mylaurier.ca | placeholder |
+
+
+
 
