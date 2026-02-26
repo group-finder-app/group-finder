@@ -66,13 +66,15 @@ This repository contains the foundational design and architectural planning for 
    cd backend
    npm install
 
-2. Create a .env file in the backend/ root directory and add the following configuration (placeholder until connection to db):
-PORT=5000
-DB_HOST=localhost
-DB_USER=your_mysql_user
-DB_PASS=your_mysql_password
-DB_NAME=grouper
-JWT_SECRET=your_secret_key
+2. Create a `.env` file in the `backend/` root directory and add the following configuration(placeholder until connection to db):
+
+   ```env
+   PORT=5000
+   DB_HOST=localhost
+   DB_USER=your_mysql_user
+   DB_PASS=your_mysql_password
+   DB_NAME=grouper
+   JWT_SECRET=your_secret_key
 
 3. To start the server in development mode:
    ```bash
