@@ -113,7 +113,7 @@ The server will start at http://localhost:5000
 |-------------|----------------|-----------------------|---------------|
 | Drake Martin | 150473490 | mart3490@mylaurier.ca | Backend Setup/README/Kanban/Wiki edits |
 | Josh Gelbaum | 169039064 | gelb9064@mylaurier.ca | Frontend Co-Developer, HTML Structure/Semantics, CSS |
-| Kyler Smart | 169040921 | smar0921@mylaurier.ca | placeholder |
+| Kyler Smart | 169040921 | smar0921@mylaurier.ca | Database Design, SQL |
 | Paul Matsialko | 169028235 | mats8235@mylaurier.ca | Frontend Co-Developer, README, JS|
 
 
