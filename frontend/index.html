@@ -405,9 +405,9 @@
 /* MOCK DATA */
 const MOCK = {
   currentUser: {
-    userID: 1, firstName: 'Drake', lastName: 'Martin',
-    email: 'mart3490@mylaurier.ca', year: 4,
-    major: 'Computer Science', score: 18,
+    userID: 1, fName: 'Drake', lName: 'Martin',
+    email: 'mart3490@mylaurier.ca', userYear: 4,
+    majorID: 'Computer Science', score: 18,
     about: "I'm a senior CS student focusing on full-stack web development. I have experience with MERN stack and I'm looking for a group for CP476 that aims for an A+.\n\nAvailable on weekends and Tuesday/Thursday evenings.",
     github: 'github.com/dmartin',
     skills: ['Python', 'JavaScript', 'React.js', 'SQL', 'Figma'],
@@ -416,47 +416,47 @@ const MOCK = {
     {
       groupID: 1, courseCode: 'CP476',
       title: 'Web Dev Project: E-Commerce',
-      description: 'Looking for a frontend developer familiar with React and Tailwind. We have backend covered.',
+      aboutGroup: 'Looking for a frontend developer familiar with React and Tailwind. We have backend covered.',
       userCount: 2, userMax: 4, dueDate: 'Apr 10',
       skills: ['JavaScript', 'React', 'Tailwind CSS'],
       members: [
-        { userID:2,  firstName:'Paul',  lastName:'Matsialko', role:'Leader • Backend',  initials:'P', color:'avatar-purple' },
-        { userID:3,  firstName:'Kyler', lastName:'Smart',     role:'Member • Database', initials:'K', color:'avatar-teal'   },
+        { userID:2,  fName:'Paul',  lName:'Matsialko', role:'Leader • Backend',  initials:'P', color:'avatar-purple' },
+        { userID:3,  fName:'Kyler', lName:'Smart',     role:'Member • Database', initials:'K', color:'avatar-teal'   },
       ],
     },
     {
       groupID: 2, courseCode: 'CP317',
       title: 'Software Engineering – SRS Docs',
-      description: 'Need one more person for documentation and QA testing. Easy going group.',
+      aboutGroup: 'Need one more person for documentation and QA testing. Easy going group.',
       userCount: 3, userMax: 4, dueDate: 'Mar 20',
       skills: ['Jira', 'Testing', 'Documentation'],
       members: [
-        { userID:4, firstName:'Alex', lastName:'Thompson', role:'Leader',        initials:'A', color:'avatar-blue'   },
-        { userID:5, firstName:'Sara', lastName:'Nguyen',   role:'Member • QA',   initials:'S', color:'avatar-orange' },
-        { userID:6, firstName:'Liam', lastName:'Chen',     role:'Member • Docs', initials:'L', color:'avatar-purple' },
+        { userID:4, fName:'Alex', lName:'Thompson', role:'Leader',        initials:'A', color:'avatar-blue'   },
+        { userID:5, fName:'Sara', lName:'Nguyen',   role:'Member • QA',   initials:'S', color:'avatar-orange' },
+        { userID:6, fName:'Liam', lName:'Chen',     role:'Member • Docs', initials:'L', color:'avatar-purple' },
       ],
     },
     {
       groupID: 3, courseCode: 'CP363',
       title: 'Database Design Project',
-      description: 'Full group established. Just posting for visibility.',
+      aboutGroup: 'Full group established. Just posting for visibility.',
       userCount: 4, userMax: 4, dueDate: 'Mar 28',
       skills: ['SQL', 'PHP', 'MySQL'],
       members: [
-        { userID:7,  firstName:'Mia',  lastName:'Park',   role:'Leader', initials:'M', color:'avatar-teal'   },
-        { userID:8,  firstName:'Tom',  lastName:'Davis',  role:'Member', initials:'T', color:'avatar-orange' },
-        { userID:9,  firstName:'Nina', lastName:'Reyes',  role:'Member', initials:'N', color:'avatar-blue'   },
-        { userID:10, firstName:'Jake', lastName:'Wilson', role:'Member', initials:'J', color:'avatar-purple' },
+        { userID:7,  fName:'Mia',  lName:'Park',   role:'Leader', initials:'M', color:'avatar-teal'   },
+        { userID:8,  fName:'Tom',  lName:'Davis',  role:'Member', initials:'T', color:'avatar-orange' },
+        { userID:9,  fName:'Nina', lName:'Reyes',  role:'Member', initials:'N', color:'avatar-blue'   },
+        { userID:10, fName:'Jake', lName:'Wilson', role:'Member', initials:'J', color:'avatar-purple' },
       ],
     },
     {
       groupID: 4, courseCode: 'CP104',
       title: 'Intro to Programming – Study Group',
-      description: 'First year student looking for partners to study with and tackle assignments together.',
+      aboutGroup: 'First year student looking for partners to study with and tackle assignments together.',
       userCount: 1, userMax: 3, dueDate: 'Ongoing',
       skills: ['Python'],
       members: [
-        { userID:11, firstName:'Priya', lastName:'Kumar', role:'Leader', initials:'P', color:'avatar-orange' },
+        { userID:11, fName:'Priya', lName:'Kumar', role:'Leader', initials:'P', color:'avatar-orange' },
       ],
     },
   ],
@@ -464,20 +464,20 @@ const MOCK = {
     groupID:5, courseCode:'CP476', title:'Project Grouper',
     userMax: 4,
     members: [
-      { userID:1,  firstName:'Drake', lastName:'Martin',    initials:'D', color:'avatar-teal'   },
-      { userID:3,  firstName:'Josh',  lastName:'Gelbaum',   initials:'J', color:'avatar-purple' },
+      { userID:1,  fName:'Drake', lName:'Martin',    initials:'D', color:'avatar-teal'   },
+      { userID:3,  fName:'Josh',  lName:'Gelbaum',   initials:'J', color:'avatar-purple' },
     ],
     requests: [
-      { reqID:1, userID:12, firstName:'Kyler', lastName:'Smart',     initials:'K', color:'avatar-teal',   message:'"I know backend dev!"' },
-      { reqID:2, userID:13, firstName:'Paul',  lastName:'Matsialko', initials:'P', color:'avatar-purple', message:'Year 4 Student'        },
+      { reqID:1, userID:12, fName:'Kyler', lName:'Smart',     initials:'K', color:'avatar-teal',   message:'"I know backend dev!"' },
+      { reqID:2, userID:13, fName:'Paul',  lName:'Matsialko', initials:'P', color:'avatar-purple', message:'Year 4 Student'        },
     ],
   },
   memberships:  [ { groupID:2, courseCode:'CP317', title:'SRS Documentation Team'  } ],
   applications: [ { groupID:3, courseCode:'CP363', title:'Database Design Project', status:'pending' } ],
   teammates: [
-    { userID:3, firstName:'Josh',  lastName:'Gelbaum',   role:'Frontend Dev',       initials:'J', color:'avatar-blue',   vouched:false },
-    { userID:4, firstName:'Kyler', lastName:'Smart',     role:'Database Architect', initials:'K', color:'avatar-teal',   vouched:true  },
-    { userID:5, firstName:'Paul',  lastName:'Matsialko', role:'Project Lead',       initials:'P', color:'avatar-orange', vouched:false },
+    { userID:3, fName:'Josh',  lName:'Gelbaum',   role:'Frontend Dev',       initials:'J', color:'avatar-blue',   vouched:false },
+    { userID:4, fName:'Kyler', lName:'Smart',     role:'Database Architect', initials:'K', color:'avatar-teal',   vouched:true  },
+    { userID:5, fName:'Paul',  lName:'Matsialko', role:'Project Lead',       initials:'P', color:'avatar-orange', vouched:false },
   ],
 };
 
@@ -557,7 +557,7 @@ function doLogin() {
   }
   if (!ok) return;
 
-  // POST /api/auth/login { email, password }
+  // POST /api/auth/login { email, hashPass }
   goToMain('tab-home');
   renderFeed();
 }
@@ -594,7 +594,7 @@ function renderFeed() {
           <span class="slots-badge ${status}">${slotBadge(g)}</span>
         </div>
         <div class="card-title">${g.title}</div>
-        <div class="card-desc">${g.description}</div>
+        <div class="card-desc">${g.aboutGroup}</div>
         <div class="tags-row">${tags}</div>
         <button class="btn btn-outline btn-sm" style="pointer-events:none;">View Details →</button>
       </div>`;
@@ -614,7 +614,7 @@ function openGroupDetail(groupID) {
   $('detail-course-badge').textContent = g.courseCode;
   $('detail-title').textContent        = g.title;
   $('detail-meta').innerHTML  = `<span>📅 Due: ${g.dueDate}</span><span>👥 ${slotBadge(g)}</span>`;
-  $('detail-desc').textContent         = g.description;
+  $('detail-desc').textContent         = g.aboutGroup;
   $('detail-tags').innerHTML           = g.skills.map(s => `<span class="tag">${s}</span>`).join('');
 
   const open = g.userMax - g.members.length;
@@ -623,7 +623,7 @@ function openGroupDetail(groupID) {
       <div class="member-item">
         <div class="avatar ${m.color}">${m.initials}</div>
         <div class="member-info">
-          <span class="member-name">${m.firstName} ${m.lastName}</span>
+          <span class="member-name">${m.fName} ${m.lName}</span>
           <span class="member-role">${m.role}</span>
         </div>
       </div>`).join('') +
@@ -669,13 +669,13 @@ function renderMyGroups() {
   const membersHtml = mg.members.map(m => `
     <div class="roster-row">
       <div class="avatar ${m.color}" style="width:28px;height:28px;font-size:11px;">${m.initials}</div>
-      <span class="roster-name">${m.firstName} ${m.lastName}</span>
+      <span class="roster-name">${m.fName} ${m.lName}</span>
     </div>`).join('');
 
   const reqsHtml = mg.requests.map(r => `
     <div class="req-item" id="req-${r.reqID}">
       <div>
-        <div class="req-name">${r.firstName} ${r.lastName}</div>
+        <div class="req-name">${r.fName} ${r.lName}</div>
         <div class="req-sub">${r.message}</div>
       </div>
       <div class="req-actions">
@@ -736,11 +736,11 @@ function handleRequest(reqID, action) {
 
   if (action === 'approve') {
     // PATCH /api/requests/:reqID { status: 'accepted' }
-    mg.members.push({ userID:req.userID, firstName:req.firstName, lastName:req.lastName, initials:req.initials, color:req.color });
-    showToast(`✅ ${req.firstName} ${req.lastName} added to your group!`);
+    mg.members.push({ userID:req.userID, fName:req.fName, lName:req.lName, initials:req.initials, color:req.color });
+    showToast(`✅ ${req.fName} ${req.lName} added to your group!`);
   } else {
     // PATCH /api/requests/:reqID { status: 'rejected' }
-    showToast(`✖ ${req.firstName} ${req.lastName} declined.`);
+    showToast(`✖ ${req.fName} ${req.lName} declined.`);
   }
 
   mg.requests.splice(idx, 1); // remove from pending list
@@ -750,9 +750,9 @@ function handleRequest(reqID, action) {
 /*PROFILE*/
 function renderProfile() {
   const u = MOCK.currentUser;
-  $('profile-initials').textContent = u.firstName[0];
-  $('profile-name').textContent     = `${u.firstName} ${u.lastName}`;
-  $('profile-sub').textContent      = `${u.major} • Year ${u.year}`;
+  $('profile-initials').textContent = u.fName[0];
+  $('profile-name').textContent     = `${u.fName} ${u.lName}`;
+  $('profile-sub').textContent      = `${u.majorID} • Year ${u.userYear}`;
   $('vouch-score').textContent      = u.score;
   $('profile-email').textContent    = u.email;
   $('profile-github').textContent   = u.github;
@@ -768,10 +768,10 @@ function renderRating() {
       <div class="rate-card">
         <div class="rate-avatar ${t.color}">${t.initials}</div>
         <div class="rate-info">
-          <span class="rate-name">${t.firstName} ${t.lastName}</span>
+          <span class="rate-name">${t.fName} ${t.lName}</span>
           <span class="rate-role">${t.role}</span>
         </div>
-        <button class="btn-vouch ${done ? 'vouched' : ''}" data-uid="${t.userID}" data-name="${t.firstName}" ${done ? 'disabled' : ''}>
+        <button class="btn-vouch ${done ? 'vouched' : ''}" data-uid="${t.userID}" data-name="${t.fName}" ${done ? 'disabled' : ''}>
           ${done ? '<span>✔</span> Vouched' : '<span>👍</span> Vouch'}
         </button>
       </div>`;
@@ -840,15 +840,15 @@ function submitCreateListing() {
   }
   if (!ok) return;
 
-  // POST /api/groups { courseCode, title, description, userMax, skills }
+  // POST /api/groups { courseCode, title, aboutGroup, userMax, skills }
   const u = MOCK.currentUser;
   MOCK.groups.unshift({
     groupID: Date.now(), courseCode: code, title,
-    description: desc || 'No description provided.',
+    aboutGroup: desc || 'No description provided.',
     userCount: 1, userMax: size, dueDate: 'TBD',
     skills: [...createTags],
-    members: [{ userID:u.userID, firstName:u.firstName, lastName:u.lastName,
-                role:'Leader', initials:u.firstName[0], color:'avatar-teal' }],
+    members: [{ userID:u.userID, fName:u.fName, lName:u.lName,
+                role:'Leader', initials:u.fName[0], color:'avatar-teal' }],
   });
 
   goToMain('tab-home');
