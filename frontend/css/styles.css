@@ -1025,3 +1025,20 @@ body {
 /* ---- ANIMATIONS ---- */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .fade-in { animation: fadeIn 0.25s ease; }
+
+/* ---- SIGNUP PAGE ---- */
+select.form-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7a9a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+select.form-input:focus { outline: none; border-color: var(--purple); background-color: var(--white); }
+
+.signup-success { text-align: center; padding: 40px 20px; }
+.signup-success-icon { font-size: 52px; margin-bottom: 16px; }
+.signup-success-title { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--green); margin-bottom: 8px; }
+.signup-success-sub { font-size: 14px; color: var(--grey-3); line-height: 1.5; margin-bottom: 24px; }

@@ -178,19 +178,62 @@
       <div class="forgot-link"><a href="#">Forgot Password?</a></div>
       <button class="btn btn-primary" style="margin-bottom:12px;" id="btn-login">Log In</button>
       <button class="btn btn-outline" id="btn-register">Create Account</button>
-      <div class="divider">or continue with</div>
-      <button class="btn-microsoft" id="btn-ms">
-        <div class="ms-grid">
-          <div class="ms-tile" style="background:#f25022"></div>
-          <div class="ms-tile" style="background:#7fba00"></div>
-          <div class="ms-tile" style="background:#00a4ef"></div>
-          <div class="ms-tile" style="background:#ffb900"></div>
-        </div>
-        Sign in with Microsoft
-      </button>
     </div>
   </div>
 
+  <!-- PAGE: SIGN UP -->
+  <div class="page" id="page-signup">
+    <div class="nav-header">
+      <button class="back-btn" id="btn-back-signup">←</button>
+      <div class="nav-title">Create Account</div>
+    </div>
+    <div class="scroll-area">
+      <div class="form-group">
+        <label class="form-label" for="signup-fname">First Name</label>
+        <input class="form-input" type="text" id="signup-fname" placeholder="Drake">
+        <div class="error-text" id="signup-fname-err">First name is required.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="signup-lname">Last Name</label>
+        <input class="form-input" type="text" id="signup-lname" placeholder="Martin">
+        <div class="error-text" id="signup-lname-err">Last name is required.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="signup-email">University Email</label>
+        <input class="form-input" type="email" id="signup-email" placeholder="mart3490@mylaurier.ca">
+        <div class="error-text" id="signup-email-err">Please enter a valid university email.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="signup-pass">Password</label>
+        <input class="form-input" type="password" id="signup-pass" placeholder="Min. 6 characters">
+        <div class="error-text" id="signup-pass-err">Password must be at least 6 characters.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="signup-year">Year of Study</label>
+        <select class="form-input" id="signup-year">
+          <option value="">Select your year...</option>
+          <option value="1">Year 1</option>
+          <option value="2">Year 2</option>
+          <option value="3">Year 3</option>
+          <option value="4">Year 4</option>
+          <option value="5">Year 5+</option>
+        </select>
+        <div class="error-text" id="signup-year-err">Please select your year.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="signup-major">Program / Major</label>
+        <select class="form-input" id="signup-major">
+          <option value="">Select your program...</option>
+          <option value="1">Computer Science</option>
+          <option value="2">Business Administration</option>
+          <option value="3">Data Science</option>
+        </select>
+        <div class="error-text" id="signup-major-err">Please select your program.</div>
+      </div>
+      <button class="btn btn-primary" id="btn-signup-submit" style="margin-top:8px;">Create Account</button>
+      <div class="error-text" id="signup-general-err" style="text-align:center;margin-top:12px;"></div>
+    </div>
+  </div>
 
   <!--PAGE: MAIN SHELL-->
   <div class="page" id="page-main">

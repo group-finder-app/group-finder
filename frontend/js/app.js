@@ -128,6 +128,91 @@ async function doLogin() {
     btn.disabled    = false;
   }
 }
+
+/* SIGN UP */
+function openSignup() {
+  ['signup-fname','signup-lname','signup-email','signup-pass'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('signup-year').value  = '';
+  document.getElementById('signup-major').value = '';
+  document.querySelectorAll('#page-signup .error-text').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('#page-signup .form-input').forEach(e => e.classList.remove('error'));
+  showPage('page-signup');
+}
+
+async function doSignup() {
+  const fname   = document.getElementById('signup-fname').value.trim();
+  const lname   = document.getElementById('signup-lname').value.trim();
+  const email   = document.getElementById('signup-email').value.trim();
+  const pass    = document.getElementById('signup-pass').value.trim();
+  const year    = document.getElementById('signup-year').value;
+  const majorID = document.getElementById('signup-major').value;
+  let ok = true;
+
+  const setErr = (id, errId, condition) => {
+    const input = document.getElementById(id);
+    const err   = document.getElementById(errId);
+    if (condition) {
+      input.classList.add('error');
+      err.classList.add('show');
+      ok = false;
+    } else {
+      input.classList.remove('error');
+      err.classList.remove('show');
+    }
+  };
+
+  setErr('signup-fname', 'signup-fname-err', !fname);
+  setErr('signup-lname', 'signup-lname-err', !lname);
+  setErr('signup-email', 'signup-email-err', !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+  setErr('signup-pass',  'signup-pass-err',  !pass || pass.length < 6);
+  setErr('signup-year',  'signup-year-err',  !year);
+  setErr('signup-major', 'signup-major-err', !majorID);
+
+  if (!ok) return;
+
+  const btn        = document.getElementById('btn-signup-submit');
+  const generalErr = document.getElementById('signup-general-err');
+  btn.textContent  = 'Creating account…';
+  btn.disabled     = true;
+  generalErr.classList.remove('show');
+
+  try {
+    // POST /api/auth/register
+    // schoolID hardcoded to 1 (Wilfrid Laurier University — only school seeded in DB)
+    await apiFetch('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        password: pass,
+        fname,
+        lname,
+        userYear: parseInt(year),
+        majorID:  parseInt(majorID),
+        schoolID: 1,
+      }),
+    });
+
+    // Replace form with success message
+    document.querySelector('#page-signup .scroll-area').innerHTML = `
+      <div class="signup-success">
+        <div class="signup-success-icon">🎉</div>
+        <div class="signup-success-title">Account Created!</div>
+        <div class="signup-success-sub">
+          Welcome to Grouper, ${fname}!<br>You can now log in with your email and password.
+        </div>
+        <button class="btn btn-primary" onclick="showPage('page-login')">Go to Login</button>
+      </div>`;
+  } catch (err) {
+    generalErr.textContent = err.message;
+    generalErr.classList.add('show');
+  } finally {
+    btn.textContent = 'Create Account';
+    btn.disabled    = false;
+  }
+}
  
 /* HOME FEED */
 async function renderFeed() {
@@ -563,10 +648,11 @@ document.addEventListener('DOMContentLoaded', () => {
  
   // Login
   $('btn-login').addEventListener('click', doLogin);
-  $('btn-ms').addEventListener('click', doLogin);
-  $('btn-register').addEventListener('click', () => showToast('Registration: contact your course admin.'));
+  $('btn-register').addEventListener('click', openSignup);
   $('login-email').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   $('login-pass').addEventListener('keydown',  e => { if (e.key === 'Enter') doLogin(); });
+  $('btn-back-signup').addEventListener('click', () => showPage('page-login'));
+  $('btn-signup-submit').addEventListener('click', doSignup);
  
   // Bottom nav
   document.querySelectorAll('.nav-item[data-tab]').forEach(item => {
