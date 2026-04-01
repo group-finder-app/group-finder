@@ -427,12 +427,33 @@
     </div>
   </div>
 
+  <!--PAGE: edit profile -->
+  <div class="page" id="page-edit-profile">
+    <div class="nav-header">
+      <button class="back-btn" id="btn-back-edit">←</button>
+      <div class="nav-title">Edit Profile</div>
+      <button class="modal-post" id="btn-save-profile">Save</button>
+    </div>
+    <div class="scroll-area" style="padding: 20px;">
+      <div class="form-group">
+        <label class="form-label" for="edit-about">About Me</label>
+        <textarea class="form-input" id="edit-about" rows="6" placeholder="Tell us about yourself..." style="height: auto; padding: 12px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="edit-skills">Technical Skills</label>
+        <input class="form-input" type="text" id="edit-skills" placeholder="e.g. Java, Node.js, MySQL">
+        <div class="helper-text" style="font-size: 11px; color: var(--grey-3); margin-top: 4px;">Separate skills with commas.</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Settings panel (phone-frame child, overlays profile) -->
   <div id="settings-panel">
     <div class="settings-sheet">
       <div class="sheet-drag"></div>
       <div style="font-size:16px;font-weight:700;margin-bottom:8px;">Settings</div>
-      <div class="settings-row settings-stub"><span class="settings-icon">✏️</span> Edit Profile</div>
+      <div class="settings-row" id="btn-trigger-edit"><span class="settings-icon">✏️</span> Edit Profile</div>
       <div class="settings-row settings-stub"><span class="settings-icon">🔔</span> Notification Preferences</div>
       <div class="settings-row settings-stub"><span class="settings-icon">🔒</span> Change Password</div>
       <div class="settings-row settings-stub"><span class="settings-icon">❓</span> Help & Support</div>

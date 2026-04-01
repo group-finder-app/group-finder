@@ -273,46 +273,70 @@ function renderFeedFromCache() {
 /* GROUP DETAIL */
 async function openGroupDetail(groupID) {
   showPage('page-detail');
+  
+  // 1. Clear previous state
   $('detail-footer').innerHTML = '';
   $('detail-course-badge').textContent = '';
-  $('detail-title').textContent        = '';
+  $('detail-title').textContent         = '';
   $('detail-meta').innerHTML           = '';
   $('detail-desc').textContent         = '';
   $('detail-tags').innerHTML           = '';
   showLoading('detail-members');
- 
+
   try {
-    // GET /api/groups/:id
+    // 2. Fetch fresh group data
     const g = await apiFetch(`/groups/${groupID}`);
     STATE.selectedGroup = g;
- 
+
+    // 3. Populate Header Info
     $('detail-course-badge').textContent = g.courseCode;
-    $('detail-title').textContent        = g.title;
-    $('detail-meta').innerHTML  = `<span>📅 Due: ${g.dueDate || 'TBD'}</span><span>👥 ${slotBadge(g)}</span>`;
+    $('detail-title').textContent         = g.title;
+    $('detail-meta').innerHTML = `<span>📅 Due: ${g.dueDate || 'TBD'}</span><span>👥 ${slotBadge(g)}</span>`;
     $('detail-desc').textContent         = g.aboutGroup || '';
     $('detail-tags').innerHTML           = (g.skills || []).map(s => `<span class="tag">${s}</span>`).join('');
- 
+
     const members   = g.members || [];
     const openSlots = Math.max(0, g.userMax - members.length);
- 
+    const myID      = STATE.currentUser?.userID;
+    const isLeader  = g.leaderID === myID;
+
+    // 4. Render Member List with Conditional Remove Button
     $('detail-members').innerHTML =
-      members.map(m => `
+      members.map(m => {
+        // Only show "Remove" if I am the leader AND it's not my own row
+        const removeBtn = (isLeader && m.userID !== myID) 
+          ? `<button class="kick-btn" data-uid="${m.userID}">Remove</button>` 
+          : '';
+
+        return `
         <div class="member-item">
-          <div class="avatar ${avatarColor(m.userID)}">${m.initials || m.fname[0]}</div>
-          <div class="member-info">
-            <span class="member-name">${m.fname} ${m.lname}</span>
-            <span class="member-role">${m.role || 'Member'}</span>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="avatar ${avatarColor(m.userID)}">${m.initials || m.fname[0]}</div>
+            <div class="member-info">
+              <span class="member-name">${m.fname} ${m.lname}</span>
+              <span class="member-role">${m.userID === g.leaderID ? 'Leader' : 'Member'}</span>
+            </div>
           </div>
-        </div>`).join('') +
+          ${removeBtn}
+        </div>`;
+      }).join('') +
       Array.from({ length: openSlots }, () => `
         <div class="member-item" style="opacity:0.45;">
           <div class="avatar avatar-empty">?</div>
           <div class="member-info"><span class="member-name">Open Slot</span></div>
         </div>`).join('');
- 
-    const myID         = STATE.currentUser?.userID;
-    const alreadyIn    = members.some(m => m.userID === myID) || g.leaderID === myID;
- 
+
+    // 5. Attach Event Listeners to any generated Remove buttons
+    $('detail-members').querySelectorAll('.kick-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeMemberFromGroup(g.groupID, parseInt(btn.dataset.uid));
+      });
+    });
+
+    // 6. Footer Button Logic (Join Request)
+    const alreadyIn = members.some(m => m.userID === myID) || g.leaderID === myID;
+
     if (g.userCount >= g.userMax) {
       $('detail-footer').innerHTML = `<button class="btn btn-ghost" style="width:100%;" disabled>Group is Full</button>`;
     } else if (alreadyIn) {
@@ -321,6 +345,7 @@ async function openGroupDetail(groupID) {
       $('detail-footer').innerHTML = `<button class="btn btn-primary" id="btn-open-join">Request to Join</button>`;
       $('btn-open-join').addEventListener('click', openJoinModal);
     }
+
   } catch (err) {
     showToast('Could not load group: ' + err.message);
     goToMain();
@@ -335,6 +360,26 @@ function openJoinModal() {
   setTimeout(() => $('join-note').focus(), 80);
 }
 function closeJoinModal() { $('join-modal').classList.remove('open'); }
+
+// remove group member
+async function removeMemberFromGroup(groupID, memberID) {
+  if (!confirm("Are you sure you want to remove this member from the group?")) return;
+
+  try {
+    // DELETE /api/groups/:id/members/:memberID
+    await apiFetch(`/groups/${groupID}/members/${memberID}`, {
+      method: 'DELETE'
+    });
+
+    showToast('Member removed.');
+    
+    // Refresh the detail page and the feed to update counts
+    await openGroupDetail(groupID);
+    await renderFeed(); 
+  } catch (err) {
+    showToast('Error: ' + err.message);
+  }
+}
  
 async function submitJoinRequest() {
   const note = $('join-note').value.trim();
@@ -487,6 +532,61 @@ function renderProfileUI(u) {
   $('profile-skills').innerHTML     = (u.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('');
   $('profile-bio').textContent      = u.aboutUser || '';
 }
+
+/* EDIT PROFILE */
+function openEditProfile() {
+  const u = STATE.currentUser || {};
+  
+  // Pre-fill the input fields with existing user data
+  $('edit-about').value = u.aboutUser || '';
+  
+  // Convert the skills array back into a comma-separated string for the input
+  $('edit-skills').value = (u.skills || []).join(', ');
+  
+  // Hide the settings overlay
+  $('settings-panel').classList.remove('open');
+  
+  // Navigate to the edit page
+  showPage('page-edit-profile');
+}
+
+async function submitEditProfile() {
+  const aboutUser = $('edit-about').value.trim();
+  const skillsStr = $('edit-skills').value.trim();
+  
+  // Convert "Node, React, Java" back into an array: ["Node", "React", "Java"]
+  const skills = skillsStr.split(',')
+    .map(s => s.trim())
+    .filter(s => s !== ""); // Remove empty strings
+
+  const btn = $('btn-save-profile');
+  const originalText = btn.textContent;
+  btn.textContent = 'Saving…';
+  btn.disabled = true;
+
+  try {
+    // PATCH to update the profile. 
+    // Ensure your backend route is set up to handle PATCH /api/users/me/profile
+    await apiFetch('/users/me/profile', {
+      method: 'PATCH',
+      body: JSON.stringify({ aboutUser, skills })
+    });
+
+    showToast('Profile updated!');
+    
+    // Re-fetch and re-render the profile to show the new data instantly
+    await renderProfile(); 
+    
+    // Go back to the profile tab
+    goToMain('tab-profile'); 
+  } catch (err) {
+    showToast('Error saving profile: ' + err.message);
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
  
 /* RATE TEAMMATES */
 async function renderRating() {
@@ -734,6 +834,11 @@ document.addEventListener('DOMContentLoaded', () => {
   $('settings-panel').addEventListener('click', e => {
     if (e.target === $('settings-panel')) $('settings-panel').classList.remove('open');
   });
+
+  $('btn-trigger-edit').addEventListener('click', openEditProfile);
+  $('btn-back-edit').addEventListener('click', () => goToMain('tab-profile'));
+  $('btn-save-profile').addEventListener('click', submitEditProfile);
+  
   document.querySelectorAll('.settings-stub').forEach(row => {
     row.addEventListener('click', () => {
       $('settings-panel').classList.remove('open');
@@ -752,5 +857,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showPage('page-login');
     showToast('Logged out.');
   });
+
  
 });

@@ -1042,3 +1042,44 @@ select.form-input:focus { outline: none; border-color: var(--purple); background
 .signup-success-icon { font-size: 52px; margin-bottom: 16px; }
 .signup-success-title { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--green); margin-bottom: 8px; }
 .signup-success-sub { font-size: 14px; color: var(--grey-3); line-height: 1.5; margin-bottom: 24px; }
+
+/* --- Kick Button Styles --- */
+
+.kick-btn {
+  /* Layout & Spacing */
+  padding: 6px 14px;
+  margin-left: 12px; /* Small gap from the name info */
+  
+  /* Typography */
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase; /* Looks more like an interface action */
+  letter-spacing: 0.5px;
+  
+  /* Colors - using a subtle red theme */
+  background-color: #fff0f0; /* Very pale red background */
+  color: #e74c3c; /* Your main error/danger red */
+  
+  /* Borders & Shape */
+  border: 1px solid #fadbd8; /* Light red border */
+  border-radius: 100px; /* Fully rounded 'pill' shape */
+  
+  /* Interaction */
+  cursor: pointer;
+  transition: all 0.2s ease; /* Smooth hover effect */
+  outline: none;
+}
+
+/* Hover effect: Swap the colors to solid red */
+.kick-btn:hover {
+  background-color: #e74c3c;
+  color: white;
+  border-color: #e74c3c;
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2); /* Subtle red shadow */
+}
+
+/* Active/Click effect: Slightly shrink */
+.kick-btn:active {
+  transform: scale(0.97);
+}

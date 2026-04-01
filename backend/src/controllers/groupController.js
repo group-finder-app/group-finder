@@ -2,12 +2,10 @@ const db = require("../config/db");
 
 // GET /api/groups
 // Returns all groups, optionally filtered by ?courseCode=CP476
-// Each group includes its member count and skill tags.
 exports.getAllGroups = async (req, res) => {
   const { courseCode } = req.query;
 
   try {
-    // Base query join courses to get courseCode
     let sql = `
       SELECT  g.groupID, g.title, g.aboutGroup, g.userCount, g.userMax,
               DATE_FORMAT(g.dueDate, '%b %d') AS dueDate,
@@ -27,14 +25,9 @@ exports.getAllGroups = async (req, res) => {
 
     const [groups] = await db.query(sql, params);
 
-    // For each group, fetch skill tags via a separate query (avoids cartesian joins)
     for (const group of groups) {
-      // Skills we store them in usersSkills on users; groups use a freeform approach
-      // via the groupsSkills concept stored as comma-separated in a skills TEXT column
-      // For now we return an empty array; wire up groupsSkills table when created.
       group.skills = [];
 
-      // Member count is already in userCount column, but also get member initials
       const [members] = await db.query(
         `SELECT p.userID, p.fname, p.lname,
                 CONCAT(LEFT(p.fname,1), LEFT(p.lname,1)) AS initials
@@ -76,7 +69,6 @@ exports.getGroupByID = async (req, res) => {
 
     const group = rows[0];
 
-    // Members
     const [members] = await db.query(
       `SELECT p.userID, p.fname, p.lname,
               CONCAT(LEFT(p.fname,1), LEFT(p.lname,1)) AS initials,
@@ -85,7 +77,7 @@ exports.getGroupByID = async (req, res) => {
        JOIN   userProfiles p ON p.userID = ug.userID
        JOIN   groupsTbl    g ON g.groupID = ug.groupID
        WHERE  ug.groupID = ?`,
-      [id, id]
+      [id]
     );
     group.members = members;
     group.skills  = [];
@@ -98,13 +90,10 @@ exports.getGroupByID = async (req, res) => {
 };
 
 // POST /api/groups
-// Body: { title, aboutGroup, userMax, dueDate, courseInstanceID }
-// Auth: required — leaderID comes from JWT
 exports.createGroup = async (req, res) => {
   const { title, aboutGroup, userMax, dueDate, courseInstanceID } = req.body;
   const leaderID = req.user.userID;
 
-  // Validation 
   if (!title || !userMax || !dueDate || !courseInstanceID) {
     return res.status(400).json({ error: "title, userMax, dueDate, and courseInstanceID are required." });
   }
@@ -116,7 +105,6 @@ exports.createGroup = async (req, res) => {
   try {
     await conn.beginTransaction();
 
-    // Insert group
     const [groupResult] = await conn.query(
       `INSERT INTO groupsTbl (userCount, userMax, title, aboutGroup, dueDate, leaderID, courseInstanceID)
        VALUES (1, ?, ?, ?, ?, ?, ?)`,
@@ -124,7 +112,6 @@ exports.createGroup = async (req, res) => {
     );
     const newGroupID = groupResult.insertId;
 
-    // Add leader to usersGroups
     await conn.query(
       "INSERT INTO usersGroups (userID, groupID) VALUES (?, ?)",
       [leaderID, newGroupID]
@@ -142,8 +129,6 @@ exports.createGroup = async (req, res) => {
 };
 
 // PATCH /api/groups/:id
-// Body: { title?, aboutGroup?, userMax?, dueDate? }
-// Auth: only the leader can edit
 exports.updateGroup = async (req, res) => {
   const { id }      = req.params;
   const { title, aboutGroup, userMax, dueDate } = req.body;
@@ -158,7 +143,6 @@ exports.updateGroup = async (req, res) => {
       return res.status(403).json({ error: "Only the group leader can edit this listing." });
     }
 
-    // Build dynamic SET clause
     const fields = [];
     const values = [];
     if (title      !== undefined) { fields.push("title = ?");      values.push(title); }
@@ -181,7 +165,6 @@ exports.updateGroup = async (req, res) => {
 };
 
 // DELETE /api/groups/:id
-// Auth: only the leader can delete
 exports.deleteGroup = async (req, res) => {
   const { id }      = req.params;
   const requesterID = req.user.userID;
@@ -197,8 +180,7 @@ exports.deleteGroup = async (req, res) => {
     }
 
     await conn.beginTransaction();
-    // Delete child records first to respect FK constraints
-    await conn.query("DELETE FROM requests    WHERE groupID = ?", [id]);
+    await conn.query("DELETE FROM requests     WHERE groupID = ?", [id]);
     await conn.query("DELETE FROM usersGroups WHERE groupID = ?", [id]);
     await conn.query("DELETE FROM groupsTbl   WHERE groupID = ?", [id]);
     await conn.commit();
@@ -208,6 +190,56 @@ exports.deleteGroup = async (req, res) => {
     await conn.rollback();
     console.error("deleteGroup error:", err);
     return res.status(500).json({ error: "Failed to delete group." });
+  } finally {
+    conn.release();
+  }
+};
+
+// DELETE /api/groups/:id/members/:memberID
+exports.removeMember = async (req, res) => {
+  const { id, memberID } = req.params;
+  const requesterID = req.user.userID;
+
+  const conn = await db.getConnection();
+  try {
+    const [rows] = await conn.query(
+      "SELECT leaderID FROM groupsTbl WHERE groupID = ?", [id]
+    );
+
+    if (rows.length === 0) return res.status(404).json({ error: "Group not found." });
+    
+    if (rows[0].leaderID !== requesterID) {
+      return res.status(403).json({ error: "Only the group leader can remove members." });
+    }
+
+    if (parseInt(memberID) === requesterID) {
+      return res.status(400).json({ error: "Leaders cannot remove themselves. Use delete group instead." });
+    }
+
+    await conn.beginTransaction();
+
+    const [delResult] = await conn.query(
+      "DELETE FROM usersGroups WHERE groupID = ? AND userID = ?",
+      [id, memberID]
+    );
+
+    if (delResult.affectedRows === 0) {
+      await conn.rollback();
+      return res.status(404).json({ error: "User is not a member of this group." });
+    }
+
+    await conn.query(
+      "UPDATE groupsTbl SET userCount = userCount - 1 WHERE groupID = ?",
+      [id]
+    );
+
+    await conn.commit();
+    return res.json({ message: "Member removed successfully." });
+
+  } catch (err) {
+    await conn.rollback();
+    console.error("removeMember error:", err);
+    return res.status(500).json({ error: "Failed to remove member." });
   } finally {
     conn.release();
   }

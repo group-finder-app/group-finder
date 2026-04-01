@@ -181,30 +181,60 @@ exports.vouchUser = async (req, res) => {
 // PATCH /api/users/me/profile
 // Update own profile fields.
 // Body: { fname?, lname?, userYear?, aboutUser? }
+// PATCH /api/users/me/profile
 exports.updateProfile = async (req, res) => {
   const userID = req.user.userID;
-  const { fname, lname, userYear, aboutUser } = req.body;
+  const { fname, lname, userYear, aboutUser, skills } = req.body; 
 
-  const fields = [];
-  const values = [];
-  if (fname     !== undefined) { fields.push("fname = ?");     values.push(fname); }
-  if (lname     !== undefined) { fields.push("lname = ?");     values.push(lname); }
-  if (userYear  !== undefined) { fields.push("userYear = ?");  values.push(userYear); }
-  if (aboutUser !== undefined) { fields.push("aboutUser = ?"); values.push(aboutUser); }
-
-  if (fields.length === 0) {
-    return res.status(400).json({ error: "No fields provided to update." });
-  }
-
+  const conn = await db.getConnection();
   try {
-    values.push(userID);
-    await db.query(
-      `UPDATE userProfiles SET ${fields.join(", ")} WHERE userID = ?`,
-      values
-    );
-    return res.json({ message: "Profile updated." });
+    await conn.beginTransaction();
+
+    // 1. Update userProfiles (Name, Year, About Me)
+    const fields = [];
+    const values = [];
+    if (fname     !== undefined) { fields.push("fname = ?");     values.push(fname); }
+    if (lname     !== undefined) { fields.push("lname = ?");     values.push(lname); }
+    if (userYear  !== undefined) { fields.push("userYear = ?");  values.push(userYear); }
+    if (aboutUser !== undefined) { fields.push("aboutUser = ?"); values.push(aboutUser); }
+
+    if (fields.length > 0) {
+      values.push(userID);
+      await conn.query(`UPDATE userProfiles SET ${fields.join(", ")} WHERE userID = ?`, values);
+    }
+
+    // 2. Sync Technical Skills 
+    if (skills && Array.isArray(skills)) {
+      // Clear existing links for this user
+      await conn.query("DELETE FROM usersSkills WHERE userID = ?", [userID]);
+
+      for (let sName of skills) {
+        const name = sName.trim();
+        if (!name) continue;
+
+        // Find or Create the skill in the master 'skills' table
+        let [rows] = await conn.query("SELECT skillID FROM skills WHERE skillName = ?", [name]);
+        let sID;
+
+        if (rows.length === 0) {
+          const [ins] = await conn.query("INSERT INTO skills (skillName) VALUES (?)", [name]);
+          sID = ins.insertId;
+        } else {
+          sID = rows[0].skillID;
+        }
+
+        // Link user to skill
+        await conn.query("INSERT INTO usersSkills (userID, skillID) VALUES (?, ?)", [userID, sID]);
+      }
+    }
+
+    await conn.commit();
+    return res.json({ message: "Profile updated successfully!" });
   } catch (err) {
+    await conn.rollback();
     console.error("updateProfile error:", err);
     return res.status(500).json({ error: "Failed to update profile." });
+  } finally {
+    conn.release();
   }
 };
