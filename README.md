@@ -254,7 +254,8 @@ DB_USER=root
 DB_PASS=your_mysql_root_password
 DB_NAME=grouper
 JWT_SECRET=grouper_secret_key_cp476_2026
-PORT=5000
+DB_PORT=3306
+SERVER_PORT=5000
 ```
 ---
 

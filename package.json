@@ -4,24 +4,11 @@
   "description": "**The Centralized Group Formation Application**",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/group-finder-app/group-finder.git"
-  },
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.0",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
-    "mysql2": "^3.6.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
   },
   "keywords": [],
   "author": "",
@@ -30,5 +17,16 @@
   "bugs": {
     "url": "https://github.com/group-finder-app/group-finder/issues"
   },
-  "homepage": "https://github.com/group-finder-app/group-finder#readme"
+  "homepage": "https://github.com/group-finder-app/group-finder#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }
