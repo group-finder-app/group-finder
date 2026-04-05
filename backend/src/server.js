@@ -1,7 +1,7 @@
 const express = require("express");
 const cors    = require("cors");
 const path    = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, ".env") });
+require("dotenv").config();
 
 const app = express();
 
@@ -46,7 +46,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "An unexpected server error occurred." });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.SERVER_PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
