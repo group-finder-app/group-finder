@@ -188,6 +188,14 @@ CREATE TABLE requests (
     CONSTRAINT requests_groups_FK FOREIGN KEY(groupID) REFERENCES groupsTbl(groupID),
     CONSTRAINT requests_unique UNIQUE(reqUserID, groupID)
 );
+
+CREATE TABLE vouches (
+    voucherID INT NOT NULL,
+    voucheeID INT NOT NULL,
+    CONSTRAINT vouches_PK PRIMARY KEY(voucherID, voucheeID),
+    CONSTRAINT voucher_users_FK FOREIGN KEY(voucherID) REFERENCES users(userID),
+    CONSTRAINT vouchee_users_FK FOREIGN KEY(voucheeID) REFERENCES users(userID)
+);
 ```
 
 **Seed the required reference data** (schools, majors, and courses must exist before users can register or create groups):
@@ -219,7 +227,7 @@ Verify everything is set up:
 ```sql
 SHOW TABLES;
 ```
-You should see 12 tables listed. Type `exit` to leave the MySQL shell.
+You should see 13 tables listed. Type `exit` to leave the MySQL shell.
 
 ---
 
