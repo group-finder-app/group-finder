@@ -125,6 +125,19 @@ exports.getMyGroups = async (req, res) => {
       [userID, userID]
     );
 
+    // For each membership group, fetch members
+    for (const g of memberships) {
+      const [members] = await db.query(
+        `SELECT p.userID, p.fname, p.lname,
+                CONCAT(LEFT(p.fname,1), LEFT(p.lname,1)) AS initials
+         FROM   usersGroups ug
+         JOIN   userProfiles p ON p.userID = ug.userID
+         WHERE  ug.groupID = ?`,
+        [g.groupID]
+      );
+      g.members = members;
+    }
+
     // Applications I've sent (pending)
     const [applications] = await db.query(
       `SELECT r.reqID, r.reqStatus, g.groupID, g.title, c.courseCode
@@ -154,27 +167,74 @@ exports.vouchUser = async (req, res) => {
   }
 
   try {
+    // Check if user has already vouched for this person
+    const [existing] = await db.query(
+      "SELECT voucherID FROM vouches WHERE voucherID = ? AND voucheeID = ?",
+      [voucherID, targetID]
+    );
+    if (existing.length > 0) {
+      return res.status(409).json({ error: "You have already vouched for this user." });
+    }
+
     // Confirm target user exists
     const [users] = await db.query(
       "SELECT userID FROM users WHERE userID = ?", [targetID]
     );
     if (users.length === 0) return res.status(404).json({ error: "User not found." });
 
-    // Increment score CHECK constraint ensures score >= 0
-    await db.query(
-      "UPDATE userProfiles SET score = score + 1 WHERE userID = ?",
-      [targetID]
-    );
+    const conn = await db.getConnection();
+    try {
+      await conn.beginTransaction();
 
-    // Return new score
-    const [updated] = await db.query(
-      "SELECT score FROM userProfiles WHERE userID = ?", [targetID]
-    );
+      // Record the vouch
+      await conn.query(
+        "INSERT INTO vouches (voucherID, voucheeID) VALUES (?, ?)",
+        [voucherID, targetID]
+      );
 
-    return res.json({ message: "Vouch recorded.", newScore: updated[0].score });
+      // Increment score CHECK constraint ensures score >= 0
+      await conn.query(
+        "UPDATE userProfiles SET score = score + 1 WHERE userID = ?",
+        [targetID]
+      );
+
+      await conn.commit();
+
+      // Return new score
+      const [updated] = await db.query(
+        "SELECT score FROM userProfiles WHERE userID = ?", [targetID]
+      );
+
+      return res.json({ message: "Vouch recorded.", newScore: updated[0].score });
+    } catch (err) {
+      await conn.rollback();
+      throw err;
+    } finally {
+      conn.release();
+    }
   } catch (err) {
     console.error("vouchUser error:", err);
     return res.status(500).json({ error: "Failed to record vouch." });
+  }
+};
+
+// GET /api/users/me/vouches
+// Returns list of userIDs that the current user has vouched for
+// Auth: required
+exports.getMyVouches = async (req, res) => {
+  const userID = req.user.userID;
+
+  try {
+    const [vouches] = await db.query(
+      "SELECT voucheeID FROM vouches WHERE voucherID = ?",
+      [userID]
+    );
+
+    const vouchedUserIDs = vouches.map(v => v.voucheeID);
+    return res.json({ vouchedUserIDs });
+  } catch (err) {
+    console.error("getMyVouches error:", err);
+    return res.status(500).json({ error: "Failed to fetch vouches." });
   }
 };
 

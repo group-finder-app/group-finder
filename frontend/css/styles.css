@@ -1079,6 +1079,39 @@ select.form-input:focus { outline: none; border-color: var(--purple); background
   box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2); /* Subtle red shadow */
 }
 
+/* --- Delete Group Button Styles --- */
+
+.btn-delete-group {
+  /* Layout & Spacing */
+  padding: 8px;
+  width: 32px;
+  height: 32px;
+  
+  /* Typography */
+  font-size: 14px;
+  
+  /* Colors - using a subtle red theme */
+  background-color: #fff0f0; /* Very pale red background */
+  color: #e74c3c; /* Your main error/danger red */
+  
+  /* Borders & Shape */
+  border: 1px solid #fadbd8; /* Light red border */
+  border-radius: var(--radius-sm);
+  
+  /* Interaction */
+  cursor: pointer;
+  transition: all 0.2s ease; /* Smooth hover effect */
+  outline: none;
+}
+
+/* Hover effect: Swap the colors to solid red */
+.btn-delete-group:hover {
+  background-color: #e74c3c;
+  color: white;
+  border-color: #e74c3c;
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2); /* Subtle red shadow */
+}
+
 /* Active/Click effect: Slightly shrink */
 .kick-btn:active {
   transform: scale(0.97);

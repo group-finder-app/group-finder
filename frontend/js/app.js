@@ -118,7 +118,16 @@ async function doLogin() {
     STATE.currentUser = data.user;
     sessionStorage.setItem('token', data.token);
     sessionStorage.setItem('user',  JSON.stringify(data.user));
- 
+
+    // Load vouched IDs for this user
+    try {
+      const vouchesData = await apiFetch('/users/me/vouches');
+      STATE.vouchedIDs = new Set(vouchesData.vouchedUserIDs || []);
+    } catch (err) {
+      console.warn('Could not load vouched IDs:', err.message);
+      STATE.vouchedIDs = new Set();
+    }
+
     goToMain('tab-home');
     await renderFeed();
   } catch (err) {
@@ -380,6 +389,26 @@ async function removeMemberFromGroup(groupID, memberID) {
     showToast('Error: ' + err.message);
   }
 }
+
+// delete group
+async function deleteGroup(groupID) {
+  if (!confirm("Are you sure you want to delete this group? This action cannot be undone.")) return;
+
+  try {
+    // DELETE /api/groups/:id
+    await apiFetch(`/groups/${groupID}`, {
+      method: 'DELETE'
+    });
+
+    showToast('Group deleted.');
+    
+    // Refresh the groups page and the feed
+    await renderMyGroups();
+    await renderFeed(); 
+  } catch (err) {
+    showToast('Error: ' + err.message);
+  }
+}
  
 async function submitJoinRequest() {
   const note = $('join-note').value.trim();
@@ -449,7 +478,10 @@ function renderMyGroupsUI({ managing, memberships, applications }) {
               <div class="manage-group-name">${mg.courseCode} – ${mg.title}</div>
               <div class="manage-group-sub">Managed by you</div>
             </div>
-            <span class="role-badge">Leader</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button class="btn-delete-group" data-groupid="${mg.groupID}" title="Delete group">🗑️</button>
+              <span class="role-badge">Leader</span>
+            </div>
           </div>
           <div class="roster-label">Current Roster (${(mg.members||[]).length}/${mg.userMax})</div>
           ${membersHtml}
@@ -465,6 +497,11 @@ function renderMyGroupsUI({ managing, memberships, applications }) {
     // Wire approve / decline buttons
     $('my-managing').querySelectorAll('[data-reqid]').forEach(btn => {
       btn.addEventListener('click', () => handleRequest(+btn.dataset.reqid, btn.dataset.status));
+    });
+
+    // Wire delete group buttons
+    $('my-managing').querySelectorAll('.btn-delete-group').forEach(btn => {
+      btn.addEventListener('click', () => deleteGroup(+btn.dataset.groupid));
     });
   }
  
@@ -630,13 +667,21 @@ async function renderRating() {
         const uid  = +btn.dataset.uid;
         const name =  btn.dataset.name;
         if (STATE.vouchedIDs.has(uid)) return;
+
+        // Disable button immediately to prevent double-clicks
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳</span> Vouching...';
+
         try {
           // POST /api/users/:uid/vouch
           await apiFetch(`/users/${uid}/vouch`, { method: 'POST' });
           STATE.vouchedIDs.add(uid);
           showToast(`You vouched for ${name}!`);
-          renderRating();
+          renderRating(); // Re-render to update the button state
         } catch (err) {
+          // Re-enable button on error
+          btn.disabled = false;
+          btn.innerHTML = '<span>👍</span> Vouch';
           showToast('Error: ' + err.message);
         }
       });
